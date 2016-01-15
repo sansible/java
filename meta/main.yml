@@ -1,0 +1,13 @@
+---
+
+allow_duplicates: yes
+dependencies: []
+
+galaxy_info:
+  author: Wojtek Oledzki
+  description: Oracle Java installation role
+  license: MIT
+  min_ansible_version: 1.8
+  platforms: [ ubuntu ]
+  categories:
+    - development
