@@ -1,7 +1,7 @@
 ---
-# install Oracle Java in headless mode
+
 - name: Configure local repository to trust the webupd8 java ppa
-  sudo: yes
+  become: yes
   apt_repository:
     repo: "ppa:webupd8team/java"
     state: present
@@ -9,7 +9,7 @@
     validate_certs: no
 
 - name: Accept Oracle Java license
-  sudo: yes
+  become: yes
   debconf:
     name: "oracle-java{{ java.version }}-installer"
     question: shared/accepted-oracle-license-v1-1
@@ -17,7 +17,7 @@
     vtype: select
 
 - name: Install Oracle Java
-  sudo: yes
+  become: yes
   apt:
     name: "{{ item }}"
     state: present

@@ -1,5 +1,13 @@
 ---
 
-- include: packages.yml
+- include: build.yml
   tags:
     - build
+
+  ## no configuration.
+- name: configure.yml
+  shell: echo "" > /tmp/ansible-city.java.configure
+  args:
+    creates: /tmp/ansible-city.java.configure
+  tags:
+    - configure
