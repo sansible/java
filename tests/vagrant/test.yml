@@ -1,6 +1,6 @@
 ---
 
-- name: Test GOCD Server
+- name: Test Java installation
   hosts: all
 
   pre_tasks:
@@ -13,4 +13,4 @@
         - build
 
   roles:
-    - name: java
+    - role: sansible.java
