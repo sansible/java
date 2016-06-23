@@ -1,7 +1,7 @@
 # Java
 
-Master: [![Build Status](https://travis-ci.org/ansible-city/java.svg?branch=master)](https://travis-ci.org/ansible-city/java)  
-Develop: [![Build Status](https://travis-ci.org/ansible-city/java.svg?branch=develop)](https://travis-ci.org/ansible-city/java)
+Master: [![Build Status](https://travis-ci.org/sansible/java.svg?branch=master)](https://travis-ci.org/sansible/java)  
+Develop: [![Build Status](https://travis-ci.org/sansible/java.svg?branch=develop)](https://travis-ci.org/sansible/java)
 
 * [ansible.cfg](#ansible-cfg)
 * [Installation and Dependencies](#installation-and-dependencies)
@@ -30,11 +30,11 @@ hash_behaviour = merge
 
 This role has no dependencies.
 
-To install run `ansible-galaxy install ansible-city.java` or add this to your
+To install run `ansible-galaxy install sansible.java` or add this to your
 `roles.yml`
 
 ```YAML
-- name: ansible-city.java
+- name: sansible.java
   version: v1.0
 ```
 

@@ -6,8 +6,8 @@
 
   ## no configuration.
 - name: configure.yml
-  shell: echo "" > /tmp/ansible-city.java.configure
+  shell: echo "" > /tmp/sansible.java.configure
   args:
-    creates: /tmp/ansible-city.java.configure
+    creates: /tmp/sansible.java.configure
   tags:
     - configure
