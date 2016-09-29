@@ -28,7 +28,7 @@ hash_behaviour = merge
 
 ## Installation and Dependencies
 
-This role has no dependencies.
+This role has no dependencies and has been tested with Ansible 1.9.4 and 2.2.1.
 
 To install run `ansible-galaxy install sansible.java` or add this to your
 `roles.yml`
