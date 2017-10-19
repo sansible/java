@@ -1,0 +1,30 @@
+---
+
+- name: Configure Oracle Java repository
+  become: yes
+  apt_repository:
+    repo: "ppa:webupd8team/java"
+    state: present
+    update_cache: yes
+    validate_certs: no
+
+- name: Accept Oracle Java license
+  become: yes
+  debconf:
+    name: "oracle-java{{ java.version }}-installer"
+    question: shared/accepted-oracle-license-v1-1
+    value: "true"
+    vtype: select
+
+- name: Install Oracle Java
+  become: yes
+  apt:
+    name: "oracle-java{{ java.version }}-installer"
+    state: present
+
+- name: Set Oracle Java as default
+  become: yes
+  apt:
+    name: "oracle-java{{ java.version }}-set-default"
+    state: present
+  when: java.set_as_default
