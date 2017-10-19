@@ -1,26 +1,14 @@
 ---
 
-- name: Configure local repository to trust the webupd8 java ppa
-  become: yes
-  apt_repository:
-    repo: "ppa:webupd8team/java"
-    state: present
-    update_cache: yes
-    validate_certs: no
+- name: Assert vendor variable
+  assert:
+    that:
+      - java.vendor in [ 'oracle', 'openjdk' ]
 
-- name: Accept Oracle Java license
-  become: yes
-  debconf:
-    name: "oracle-java{{ java.version }}-installer"
-    question: shared/accepted-oracle-license-v1-1
-    value: "true"
-    vtype: select
+- name: Build Oracle Java
+  include: build/build-oracle.yml
+  when: java.vendor == 'oracle'
 
-- name: Install Oracle Java
-  become: yes
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - "oracle-java{{ java.version }}-installer"
-    - "oracle-java{{ java.version }}-set-default"
+- name: Install OpenJDK Java
+  include: build/build-openjdk.yml
+  when: java.vendor == 'openjdk'

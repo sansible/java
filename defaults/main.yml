@@ -1,4 +1,7 @@
 ---
 
 java:
+  set_as_default: yes
+  # Can be oracle or openjdk
+  vendor: openjdk
   version: 7

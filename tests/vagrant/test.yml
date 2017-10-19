@@ -3,6 +3,9 @@
 - name: Test Java installation
   hosts: all
 
+  vars:
+    default_java_version: 7
+
   pre_tasks:
     - name: Update apt
       become: yes
@@ -14,3 +17,18 @@
 
   roles:
     - role: sansible.java
+      java:
+        version: "{{ default_java_version }}"
+
+    - role: sansible.java
+      java:
+        set_as_default: no
+        version: 8
+
+  post_tasks:
+    - name: Check correct version of Java installed
+      command: "java -version"
+      register: java_version_check
+      failed_when: not ( java_version_check.stderr | match('.*1.' + ( default_java_version | string ) + '.*') )
+      tags:
+        - assert
