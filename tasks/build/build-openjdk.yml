@@ -27,3 +27,15 @@
     name: java
     path: "{{ jdk_path.stdout }}/jre/bin/java"
   when: java.set_as_default
+
+- name: Ensure Java CA certs installed
+  become: yes
+  apt:
+    name: ca-certificates-java
+    state: present
+
+- name: Ensure Java CA cert exists
+  become: yes
+  command: update-ca-certificates -f
+  args:
+    creates: /etc/ssl/certs/java/cacerts
