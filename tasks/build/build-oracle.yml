@@ -18,6 +18,15 @@
 
 - name: Install Oracle Java
   become: yes
+  ignore_errors: yes
+  apt:
+    name: "oracle-java{{ java.version }}-installer"
+    state: present
+- name: Set java URL fix
+  become: yes
+  script: java_fix.sh
+- name: Install Oracle Java
+  become: yes
   apt:
     name: "oracle-java{{ java.version }}-installer"
     state: present
