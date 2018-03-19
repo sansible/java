@@ -1,43 +1,83 @@
+ANSIBLE_INSTALL_VERSION ?= 2.3.3.0
+PATH := $(PWD)/.venv_ansible$(ANSIBLE_INSTALL_VERSION)/bin:$(shell printenv PATH)
+SHELL := env PATH=$(PATH) /bin/bash
 
-BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
+.DEFAULT_GOAL := help
+.PHONY: all clean destroy help test
 
-all: test clean
 
-watch: test_deps
-	while sleep 1; do \
-		find defaults/ handlers/ meta/ tasks/ templates/ tests/vagrant/test.yml \
-		| entr -d make lint vagrant_up; \
+_check_venv:
+	@if [ ! -e .venv_ansible$(ANSIBLE_INSTALL_VERSION)/bin/activate ]; then \
+	 	echo -e "\033[0;31mERROR: No virtualenv found - run 'make deps' first\033[0m"; \
+		false; \
+	fi
+
+
+## Make deps, test
+all: deps test
+
+
+## Activate the virtualenv
+activate: _check_venv
+	@echo -e "\033[0;32mINFO: Activating venv_ansible$(ANSIBLE_INSTALL_VERSION) (ctrl-d to exit)\033[0m"
+	@exec $(SHELL) --init-file .venv_ansible$(ANSIBLE_INSTALL_VERSION)/bin/activate
+
+
+## Destroy docker instances, remove virtualenv, molecule temp, .pyc files
+clean: destroy
+	rm -rf .venv_ansible*
+	rm -rf molecule/*/.cache/
+	rm -rf molecule/*/.molecule/
+	find . -name "*.pyc" -exec rm {} \;
+
+
+## Run 'molecule destroy'
+destroy:
+	@if [ -x .venv_ansible$(ANSIBLE_INSTALL_VERSION)/bin/molecule ]; then \
+		.venv_ansible$(ANSIBLE_INSTALL_VERSION)/bin/molecule destroy; \
+	elif (which -s molecule); then \
+		echo -e "\033[0;33mWARNING: molecule not found in virtualenv - trying to use molecule in PATH\033[0m"; \
+		molecule destroy; \
+	else \
+		echo -e "\033[0;33mWARNING: molecule not found - either remove potential containers manually or run 'make deps' first\033[0m"; \
+	fi
+
+## Login to docker container named '%'
+login_%: _check_venv
+	@echo -e "\033[0;32mINFO: Logging into $(subst login_,,$@) (ctrl-d to exit)\033[0m"
+	@.venv_ansible$(ANSIBLE_INSTALL_VERSION)/bin/molecule login --host $(subst login_,,$@)
+
+## Run 'molecule test --destroy=never' (run 'make destroy' to destroy containers)
+test: _check_venv
+	@.venv_ansible$(ANSIBLE_INSTALL_VERSION)/bin/molecule test --destroy=never
+
+
+## Create virtualenv, install dependencies
+deps:
+	@if (python -V 2>&1 | grep -qv "Python 2.7"); then \
+		echo -e "\033[0;31mERROR: Only Python 2.7 is supported at this stage\033[0m"; \
+		false; \
+	fi
+	virtualenv .venv_ansible$(ANSIBLE_INSTALL_VERSION)
+	.venv_ansible$(ANSIBLE_INSTALL_VERSION)/bin/pip install -r requirements.txt --ignore-installed
+	.venv_ansible$(ANSIBLE_INSTALL_VERSION)/bin/pip install ansible==$(ANSIBLE_INSTALL_VERSION)
+	virtualenv --relocatable .venv_ansible$(ANSIBLE_INSTALL_VERSION)
+	@echo -e "\033[0;32mINFO: Run 'make activate' to activate the virtualenv for this shell\033[0m"
+
+
+## Run 'make test' on any file change
+watch: _check_venv
+	@while sleep 1; do \
+		find defaults/ files/ handlers/ meta/ molecule/*/*.yml molecule/*/test/*.py tasks/ templates/ vars/ 2> /dev/null \
+		| entr -d make test; \
 	done
 
-test: test_deps vagrant_up
 
-integration_test: clean integration_test_deps vagrant_up clean
-
-test_deps:
-	rm -rf tests/vagrant/sansible.*
-	ln -s ../.. tests/vagrant/sansible.java
-
-integration_test_deps:
-	sed -i.bak \
-		-E 's/(.*)version: (.*)/\1version: origin\/$(BRANCH)/' \
-		tests/vagrant/integration_requirements.yml
-	rm -rf tests/vagrant/sansible.*
-	mv tests/vagrant/integration_requirements.yml.bak tests/vagrant/integration_requirements.yml
-
-vagrant_up:
-	@cd tests/vagrant; \
-	if (vagrant status | grep -E "(running|saved|poweroff)" 1>/dev/null) then \
-		vagrant up || exit 1; \
-		vagrant provision || exit 1; \
-	else \
-		vagrant up || exit 1; \
-	fi;
-
-vagrant_ssh:
-	@cd tests/vagrant; \
-	vagrant up || exit 1; \
-	vagrant ssh
-
-clean:
-	rm -rf tests/vagrant/sansible.*
-	cd tests/vagrant && vagrant destroy
+help:
+	@awk -v skip=1 \
+		'/^##/ { sub(/^[#[:blank:]]*/, "", $$0); doc_h=$$0; doc=""; skip=0; next } \
+		 skip  { next } \
+		 /^#/  { doc=doc "\n" substr($$0, 2); next } \
+		 /:/   { sub(/:.*/, "", $$0); \
+		 printf "\033[34m%-30s\033[0m\033[1m%s\033[0m %s\n\n", $$0, doc_h, doc; skip=1 }' \
+		$(MAKEFILE_LIST)
