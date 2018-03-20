@@ -1,7 +1,5 @@
 ---
 
-java:
-  set_as_default: yes
-  # Can be oracle or openjdk
-  vendor: openjdk
-  version: 7
+sansible_java_set_as_default: yes
+sansible_java_vendor: openjdk  # this can be either oracle or openjdk
+sansible_java_version: 7

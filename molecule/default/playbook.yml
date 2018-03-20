@@ -1,0 +1,19 @@
+---
+
+- name: Converge
+  hosts: all
+  roles:
+    - role: java
+      sansible_java_set_as_default: no
+      sansible_java_vendor: oracle
+      sansible_java_version: 8
+
+    - role: java
+      sansible_java_set_as_default: no
+      sansible_java_vendor: oracle
+      sansible_java_version: 9
+
+    - role: java
+      sansible_java_set_as_default: yes
+      sansible_java_vendor: openjdk
+      sansible_java_version: 8

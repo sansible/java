@@ -11,7 +11,7 @@
 - name: Accept Oracle Java license
   become: yes
   debconf:
-    name: "oracle-java{{ java.version }}-installer"
+    name: "oracle-java{{ sansible_java_version }}-installer"
     question: shared/accepted-oracle-license-v1-1
     value: "true"
     vtype: select
@@ -19,12 +19,12 @@
 - name: Install Oracle Java
   become: yes
   apt:
-    name: "oracle-java{{ java.version }}-installer"
+    name: "oracle-java{{ sansible_java_version }}-installer"
     state: present
 
 - name: Set Oracle Java as default
   become: yes
   apt:
-    name: "oracle-java{{ java.version }}-set-default"
+    name: "oracle-java{{ sansible_java_version }}-set-default"
     state: present
-  when: java.set_as_default
+  when: sansible_java_set_as_default

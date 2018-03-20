@@ -11,22 +11,15 @@
 - name: Install OpenJDK Java
   become: yes
   apt:
-    name: "openjdk-{{ java.version }}-jdk"
+    name: "openjdk-{{ sansible_java_version }}-jdk"
     state: present
-
-- name: Get OpenJDK Java path
-  shell: "update-java-alternatives --list | grep 'java-1.{{ java.version }}.*-openjdk' | cut -d' ' -f3-"
-  register: jdk_path
-  when: java.set_as_default
-  changed_when: False
-  failed_when: jdk_path.stdout == ''
 
 - name: Set OpenJDK Java as default
   become: yes
   alternatives:
     name: java
-    path: "{{ jdk_path.stdout }}/jre/bin/java"
-  when: java.set_as_default
+    path: "/usr/lib/jvm/java-{{ sansible_java_version }}-openjdk-amd64/jre/bin/java"
+  when: sansible_java_set_as_default
 
 - name: Ensure Java CA certs installed
   become: yes
