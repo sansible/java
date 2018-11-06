@@ -1,12 +1,25 @@
 ---
 
-- name: Configure OpenJDK Java repository
+- name: Download OpenJDK PGP key (works with Bionic behind a proxy)
+  become: yes
+  get_url:
+    dest: /usr/local/src/java_openjdk.asc
+    mode: 0644
+    url: "https://{{ sansible_java_apt_openjdk_keyserver }}/pks/lookup?op=get&search=0x{{ sansible_java_apt_openjdk_key_id }}"
+
+- name: Ensures OpenJDK PGP key is known
+  become: yes
+  apt_key:
+    file: /usr/local/src/java_openjdk.asc
+    id: "{{ sansible_java_apt_openjdk_key_id }}"
+    state: present
+
+- name: Add OpenJDK repo
   become: yes
   apt_repository:
-    repo: ppa:openjdk-r/ppa
+    repo: "{{ sansible_java_apt_openjdk_repo }}"
     state: present
     update_cache: yes
-    validate_certs: no
 
 - name: Install OpenJDK Java
   become: yes

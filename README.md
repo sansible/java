@@ -1,6 +1,6 @@
 # java
 
-Master: [![Build Status](https://travis-ci.org/sansible/java.svg?branch=master)](https://travis-ci.org/sansible/java)  
+Master: [![Build Status](https://travis-ci.org/sansible/java.svg?branch=master)](https://travis-ci.org/sansible/java)
 Develop: [![Build Status](https://travis-ci.org/sansible/java.svg?branch=develop)](https://travis-ci.org/sansible/java)
 
 * [ansible.cfg](#ansible-cfg)
@@ -23,7 +23,7 @@ To install run `ansible-galaxy install sansible.java` or add this to your
 
 ```YAML
 - name: sansible.java
-  version: v2.0
+  version: v2.1
 ```
 
 and run `ansible-galaxy install -p ./roles -r roles.yml`
