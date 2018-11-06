@@ -5,6 +5,12 @@
     that:
       - sansible_java_vendor in [ 'oracle', 'openjdk' ]
 
+- name: Install gnupg2 for apt
+  become: yes
+  apt:
+    name: gnupg2
+    state: present
+
 - name: Build Oracle Java
   include: build/build-oracle.yml
   when: sansible_java_vendor == 'oracle'
