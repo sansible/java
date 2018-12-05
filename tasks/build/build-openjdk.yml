@@ -21,7 +21,7 @@
     state: present
     update_cache: yes
 
-- name: Install OpenJDK Java
+- name: "Install OpenJDK Java {{ sansible_java_version }}"
   become: yes
   apt:
     name: "openjdk-{{ sansible_java_version }}-jdk"
@@ -31,7 +31,8 @@
   become: yes
   alternatives:
     name: java
-    path: "/usr/lib/jvm/java-{{ sansible_java_version }}-openjdk-amd64/jre/bin/java"
+    path: "/usr/lib/jvm/java-{{ sansible_java_version }}-openjdk-amd64\
+      {{ '/jre' if sansible_java_version < 11 else '' }}/bin/java"
   when: sansible_java_set_as_default
 
 - name: Ensure Java CA certs installed

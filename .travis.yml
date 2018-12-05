@@ -30,7 +30,8 @@ install:
   - make deps
 
 script:
-  - make test
+  - travis_wait 30 make test SCENARIO=java11
+  - make test SCENARIO=java8
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

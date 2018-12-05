@@ -1,6 +1,6 @@
 ---
 
-- name: Converge
+- name: Java 8 Tests
   hosts: all
   roles:
     - role: java

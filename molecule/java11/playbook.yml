@@ -1,0 +1,9 @@
+---
+
+- name: Java 11 Tests
+  hosts: all
+  roles:
+    - role: java
+      sansible_java_set_as_default: yes
+      sansible_java_vendor: openjdk
+      sansible_java_version: 11

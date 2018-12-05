@@ -29,7 +29,7 @@
     value: "true"
     vtype: select
 
-- name: Install Oracle Java
+- name: "Install Oracle Java {{ sansible_java_version }}"
   become: yes
   apt:
     name: "oracle-java{{ sansible_java_version }}-installer"
