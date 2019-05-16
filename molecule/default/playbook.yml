@@ -1,8 +1,8 @@
 ---
 
-- name: Java 11 Tests
+- name: Java 8 Tests
   hosts: all
   roles:
     - role: java
       sansible_java_set_as_default: yes
-      sansible_java_version: 11
+      sansible_java_version: 8
