@@ -8,7 +8,7 @@ Develop: [![Build Status](https://travis-ci.org/sansible/java.svg?branch=develop
 * [Tags](#tags)
 * [Examples](#examples)
 
-This roles installs OpenJDK Java or Oracle Java, any version can be installed
+This roles installs OpenJDK Java, any version can be installed
 but 7 is used by default (which may not be available on all O/S releases).
 
 *NOTE:* Only x86_64 is supported.
@@ -33,21 +33,24 @@ and run `ansible-galaxy install -p ./roles -r roles.yml`
 
 This role uses one tag: **build**
 
-* `build` - Installs Oracle Java.
+* `build` - Installs OpenJDK Java.
 
 
 ## Arguments
 
 Argument | Default | Description
 ----------|---------|------------
+
+sansible_java_apt_key_id | EB9B1D8886F44E2A | Fingerprint of PGP used to verify repo
+sansible_java_apt_keyserver | http://eu.pool.sks-keyservers.net | Keyserver to grab PGP key from
+sansible_java_apt_repo | See defaults | The repo to grab packages from
 sansible_java_set_as_default | yes | Set the installed version as default
-sansible_java_vendor | openjdk | The flavour of the JDK to be installed.  Can be either `openjdk` or `oracle`
 sansible_java_version | 8 | The Java version to be installed
 
 
 ## Example Playbook
 
-To install OpenJDK Java 8:
+To install OpenJDK Java 7:
 
 ```YAML
 - name: Install Java
@@ -55,18 +58,6 @@ To install OpenJDK Java 8:
 
   roles:
     - name: java
-```
-
-To install Oracle Java 7:
-
-```YAML
-- name: Install Java
-  hosts: sandbox
-
-  roles:
-    - name: java
-      java:
-        vendor: oracle
 ```
 
 To install OpenJDK Java 8:
