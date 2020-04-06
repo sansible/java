@@ -39,14 +39,14 @@
 
 - name: Get DEB architecture
   command: dpkg --print-architecture
-  register: deb_architecture
+  register: sansible_java_deb_architecture
   changed_when: False
 
 - name: Set OpenJDK Java as default
   become: yes
   alternatives:
     name: java
-    path: "/usr/lib/jvm/java-{{ sansible_java_version }}-openjdk-{{ deb_architecture.stdout | lower }}\
+    path: "/usr/lib/jvm/java-{{ sansible_java_version }}-openjdk-{{ sansible_java_deb_architecture.stdout | lower }}\
       {{ '/jre' if sansible_java_version < 11 else '' }}/bin/java"
   when: sansible_java_set_as_default
 
