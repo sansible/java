@@ -42,7 +42,7 @@ Argument | Default | Description
 ----------|---------|------------
 
 sansible_java_apt_key_id | EB9B1D8886F44E2A | Fingerprint of PGP used to verify repo
-sansible_java_apt_keyserver | http://eu.pool.sks-keyservers.net | Keyserver to grab PGP key from
+sansible_java_apt_keyserver | http://keyserver.ubuntu.com | Keyserver to grab PGP key from
 sansible_java_apt_repo | See defaults | The repo to grab packages from
 sansible_java_set_as_default | yes | Set the installed version as default
 sansible_java_version | 8 | The Java version to be installed
